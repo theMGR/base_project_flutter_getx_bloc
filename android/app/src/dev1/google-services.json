@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "612553350254",
+    "project_id": "com-mgk-silkstracker",
+    "storage_bucket": "com-mgk-silkstracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612553350254:android:49f0be49c87624b122da7f",
+        "android_client_info": {
+          "package_name": "com.mgk.silksTracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612553350254-euvfqkvid3i0vb53cbi69ms7htrt4tu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrlzMxRfEtlGoChoFf-e96O10ym9spMtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612553350254-euvfqkvid3i0vb53cbi69ms7htrt4tu9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "612553350254-4p9s689g4jlkjrkgtd9un0590esnsr2h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mgk.silksTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

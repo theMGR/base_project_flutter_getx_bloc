@@ -1,0 +1,153 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+
+android {
+    compileSdkVersion 30
+
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com"
+        minSdkVersion 20
+        targetSdkVersion 30
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+        live {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "show_log", "true"
+        }
+        release {
+            debuggable false
+            signingConfig signingConfigs.live
+            buildConfigField "boolean", "show_log", "false"
+        }
+    }
+
+    flavorDimensions 'mode'
+    productFlavors {
+        //app 1 start
+        dev1 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Silks Tracker"]
+            resValue "string", "app_name", "Silks Tracker"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        uat1 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "UAT 1"]
+            resValue "string", "app_name", "UAT 1"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        demo1 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Demo 1"]
+            resValue "string", "app_name", "Demo 1"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        live1 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Live 1"]
+            resValue "string", "app_name", "Live 1"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+
+        // app 2 start
+        dev2 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Fashion Tracker"]
+            resValue "string", "app_name", "Fashion Tracker"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        uat2 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "UAT 2"]
+            resValue "string", "app_name", "UAT 2"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        demo2 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Demo 2"]
+            resValue "string", "app_name", "Demo 2"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+        live2 {
+            dimension 'mode'
+            manifestPlaceholders = [appLabel: "Live 2"]
+            resValue "string", "app_name", "Live 2"
+            applicationIdSuffix ".mgk.silksTracker"
+        }
+
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            //output.outputFileName = "WOC ${variant.flavorName.toUpperCase()} v${variant.versionName}.apk"
+            output.outputFileName = "${variant.flavorName.toUpperCase()} v${variant.versionName}.apk"
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation platform('com.google.firebase:firebase-bom:28.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
+}
