@@ -1,0 +1,1 @@
+class NoNetwork implements Exception {}
