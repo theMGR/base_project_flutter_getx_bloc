@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:project/core/utils/print_utils.dart';
 import 'package:project/data/local/repository/locale_repository.dart';
-import 'package:project/ui/config/route_config.dart';
-import 'package:project/ui/config/ui_config.dart';
-import 'package:project/ui/di/app_bloc_container.dart';
-import 'package:project/ui/di/di_container.dart';
+import 'package:project/presentation/ui/config/route_config.dart';
+import 'package:project/presentation/ui/config/ui_config.dart';
+import 'package:project/presentation/ui/di/app_bloc_container.dart';
+import 'package:project/presentation/ui/di/di_container.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
-import 'lang/translation_service.dart';
+import 'presentation/lang/translation_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

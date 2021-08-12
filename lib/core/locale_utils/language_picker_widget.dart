@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project/data/local/repository/locale_repository.dart';
-import 'package:project/lang/translation_service.dart';
+import 'package:project/presentation/lang/translation_service.dart';
 
 class LanguagePickerWidget extends StatelessWidget {
   @override

@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:project/core/utils/print_utils.dart';
 import 'package:project/core/utils/validation_utils.dart';
 import 'package:project/core/widgets/retry_widget/retry_widget.dart';
-import 'package:project/res/business_constants/ui_constants.dart';
-import 'package:project/res/constants/constant_color.dart';
+import 'package:project/presentation/res/business_constants/ui_constants.dart';
+import 'package:project/presentation/res/constants/constant_color.dart';
 
 import 'dates_utils.dart';
 import 'input_type_utils.dart';

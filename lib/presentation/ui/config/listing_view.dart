@@ -12,17 +12,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 enum ListingWithSearchItemType { TYPE_CARD, TYPE_CONTAINER }
 
-abstract class ListingWithSearchListener<Item> {
-  void onListProcessing({String? searchText, String? filterColumn, bool? paging, int? limit, String? minDate, String? maxDate, int? pageNumber});
-
-  Widget onCreateListItem({BuildContext? context, Item? item, int? index, List<Item>? items});
-
-  String? getSavedDate(Item item);
-}
+typedef void OnListProcessing({String? searchText, String? filterColumn, bool? paging, int? pageSize, String? minDate, String? maxDate, int? pageNumber});
+typedef Widget OnCreateListItem<Item>(BuildContext context, Item item, int index, List<Item> items);
+typedef String? GetSavedDate<Item>(Item item);
 
 enum SearchType { SEARCH_DIALOG, SEARCH_LIST_BOTTOM }
 
-class ListingWithSearch4<Item> extends StatefulWidget {
+class ListingView<Item> extends StatefulWidget {
   final double borderRadiusSearchBar;
   final double borderRadiusSearchFilterItem;
   final double borderRadiusItem;
@@ -30,23 +26,24 @@ class ListingWithSearch4<Item> extends StatefulWidget {
   final Color itemBorderColor;
   final EdgeInsetsGeometry itemPadding;
   final int filterIndex;
-  final ListingWithSearchListener listener;
   final List filterTexts;
   final List filterColumns;
   final bool isSearchEnabled;
   final String searchText;
-  final bool paging;
+  final bool? paging;
   final int pageSize;
   final ListingWithSearchItemType listingWithSearchItemType;
   final Color listItemBackgroundColor;
   final SearchType searchType;
   final bool isPaginationBasedOnPageNumber;
+  final OnListProcessing onListProcessing;
+  final OnCreateListItem<Item> onCreateListItem;
+  final GetSavedDate<Item> getSavedDate;
   final bool enablePullUp;
   final bool enablePullDown;
 
-  ListingWithSearch4(
+  ListingView(
       {Key? key,
-      required this.listener,
       this.filterTexts = const [],
       this.filterColumns = const [],
       this.isSearchEnabled = false,
@@ -59,19 +56,21 @@ class ListingWithSearch4<Item> extends StatefulWidget {
       this.isPaginationBasedOnPageNumber = false,
       this.borderRadiusSearchBar = 0,
       this.borderRadiusItem = 0,
-      this.borderRadiusSearchFilterItem = 30,
+      this.borderRadiusSearchFilterItem = 0,
       this.itemMargin = const EdgeInsets.only(left: 5, right: 5, top: 5),
       this.itemBorderColor = Colors.white,
       this.itemPadding = const EdgeInsets.all(10),
       this.filterIndex = -1,
+      required this.onListProcessing,
+      required this.onCreateListItem,
+      required this.getSavedDate,
       this.enablePullUp = true,
       this.enablePullDown = true})
       : super(key: key);
 
   @override
-  ListingWithSearchState4 createState() => ListingWithSearchState4<Item>(
+  ListingViewState createState() => ListingViewState<Item>(
       searchText: searchText,
-      listener: listener,
       filterTexts: filterTexts,
       filterColumns: filterColumns,
       isSearchEnabled: isSearchEnabled,
@@ -88,11 +87,14 @@ class ListingWithSearch4<Item> extends StatefulWidget {
       itemBorderColor: itemBorderColor,
       itemPadding: itemPadding,
       filterIndex: filterIndex,
+      onListProcessing: onListProcessing,
+      onCreateListItem: onCreateListItem,
+      getSavedDate: getSavedDate,
       enablePullUp: enablePullUp,
-      enablePullDown: enablePullDown);
+      enablePullDown : enablePullDown);
 }
 
-class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
+class ListingViewState<Item> extends State<ListingView> {
   final double borderRadiusSearchBar;
   final double borderRadiusSearchFilterItem;
   final double borderRadiusItem;
@@ -100,16 +102,18 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
   final Color itemBorderColor;
   final EdgeInsetsGeometry itemPadding;
   int filterIndex;
-  final ListingWithSearchListener listener;
   final SearchType searchType;
   final bool isPaginationBasedOnPageNumber;
+  final OnListProcessing onListProcessing;
+  final OnCreateListItem<Item> onCreateListItem;
+  final GetSavedDate<Item> getSavedDate;
   final bool enablePullUp;
   final bool enablePullDown;
   final List filterTexts;
   final List filterColumns;
   bool isSearchEnabled;
   String searchText;
-  final bool paging;
+  final bool? paging;
   final int pageSize;
   final ListingWithSearchItemType listingWithSearchItemType;
   final Color listItemBackgroundColor;
@@ -150,9 +154,8 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
   bool _enablePullUp = false;
   bool _enablePullDown = false;
 
-  ListingWithSearchState4(
-      {required this.listener,
-      required this.searchText,
+  ListingViewState(
+      {required this.searchText,
       required this.filterTexts,
       required this.filterColumns,
       required this.isSearchEnabled,
@@ -169,6 +172,9 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
       required this.itemBorderColor,
       required this.itemPadding,
       required this.filterIndex,
+      required this.onListProcessing,
+      required this.onCreateListItem,
+      required this.getSavedDate,
       required this.enablePullUp,
       required this.enablePullDown});
 
@@ -178,10 +184,10 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
 
     _pageNumber = 1;
     _pageNumberLastSaved = _pageNumber;
-    listener.onListProcessing(
+    onListProcessing(
         searchText: searchText,
         filterColumn: ValidationUtils.isEmpty(_filterColumn) || ValidationUtils.isEmpty(searchText) ? "" : _filterColumn,
-        limit: pageSize,
+        pageSize: pageSize,
         paging: paging,
         minDate: minDate,
         maxDate: maxDate,
@@ -221,7 +227,7 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
         children: [
           Icon(
             FontAwesomeIcons.hourglassEnd,
-            size: 60,
+            size: 60, color: Colors.grey,
           ),
           SizedBox(height: 10),
           Text('Please wait')
@@ -350,8 +356,8 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
             child: SmartRefresher(
                 key: _refreshKey,
                 controller: _refreshController,
-                enablePullUp: enablePullUp ? _enablePullUp : false,
-                enablePullDown: enablePullDown ? _enablePullDown : false,
+                enablePullUp: enablePullUp ? _enablePullUp: false,
+                enablePullDown: enablePullDown ? _enablePullDown: false,
                 physics: BouncingScrollPhysics(),
                 footer: ClassicFooter(
                   loadStyle: LoadStyle.ShowWhenLoading,
@@ -377,7 +383,7 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _cardOrContainer(child: listener.onCreateListItem(context: context, item: data[index], index: index, items: data)),
+                  _cardOrContainer(child: onCreateListItem(context, data[index], index, data)),
                   _onException == true && index == data.length - 1 ? _retryContent : Container()
                 ],
               ));
@@ -415,10 +421,10 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
 
     _pageNumber = 1;
     _pageNumberLastSaved = _pageNumber;
-    listener.onListProcessing(
+    onListProcessing(
         searchText: searchText,
         filterColumn: ValidationUtils.isEmpty(_filterColumn) || ValidationUtils.isEmpty(searchText) ? "" : _filterColumn,
-        limit: pageSize,
+        pageSize: pageSize,
         paging: paging,
         minDate: minDate,
         maxDate: maxDate,
@@ -436,7 +442,7 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
     Print.Reference("data length: ${data.length}");
     Print.Reference(data.length - 2);
 
-    minDate = ValidationUtils.isEmpty(listener.getSavedDate(data.last)) ? "" : listener.getSavedDate(data.last);
+    minDate = ValidationUtils.isEmpty(getSavedDate(data.last)) ? "" : getSavedDate(data.last);
 
     if (isPaginationBasedOnPageNumber) {
       _pageNumber++;
@@ -446,10 +452,10 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
       _pageNumber = 1;
       _pageNumberLastSaved = _pageNumber;
     }
-    listener.onListProcessing(
+    onListProcessing(
         searchText: searchText,
         filterColumn: ValidationUtils.isEmpty(_filterColumn) || ValidationUtils.isEmpty(searchText) ? "" : _filterColumn,
-        limit: pageSize,
+        pageSize: pageSize,
         paging: paging,
         minDate: minDate,
         maxDate: maxDate,
@@ -474,10 +480,10 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
       minDate = "";
     }
 
-    listener.onListProcessing(
+    onListProcessing(
         searchText: searchText,
         filterColumn: ValidationUtils.isEmpty(_filterColumn) || ValidationUtils.isEmpty(searchText) ? "" : _filterColumn,
-        limit: pageSize,
+        pageSize: pageSize,
         paging: paging,
         minDate: minDate,
         maxDate: maxDate,
@@ -681,10 +687,10 @@ class ListingWithSearchState4<Item> extends State<ListingWithSearch4> {
       _pageNumber = 1;
       _pageNumberLastSaved = _pageNumber;
     }
-    listener.onListProcessing(
+    onListProcessing(
         searchText: searchText,
         filterColumn: ValidationUtils.isEmpty(_filterColumn) || ValidationUtils.isEmpty(searchText) ? "" : _filterColumn,
-        limit: pageSize,
+        pageSize: pageSize,
         paging: paging,
         minDate: minDate,
         maxDate: maxDate,
