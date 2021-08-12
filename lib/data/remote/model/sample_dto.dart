@@ -11,7 +11,7 @@ class SampleQuotableDTO {
   final int? totalCount;
   final int? page;
   final int? totalPages;
-  final List<SampleQuotableDTOResults>? results;
+  final List<SampleQuotableDTOResults?>? results;
 
 
   SampleQuotableDTO({this.count, this.totalCount, this.page, this.totalPages, this.results});

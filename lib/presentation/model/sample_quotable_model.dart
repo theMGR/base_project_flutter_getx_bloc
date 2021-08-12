@@ -3,7 +3,7 @@ class SampleQuotableModel {
   final int? totalCount;
   final int? page;
   final int? totalPages;
-  final List<SampleQuotableModelResults>? results;
+  final List<SampleQuotableModelResults?>? results;
 
   SampleQuotableModel({this.count, this.totalCount, this.page, this.totalPages, this.results});
 }

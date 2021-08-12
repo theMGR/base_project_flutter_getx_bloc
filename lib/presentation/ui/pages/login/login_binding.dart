@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:project/data/remote/repository/sample_repository.dart';
+import 'package:project/data/remote/repository/sample_quotable_repository_impl.dart';
 
 import 'login_controller.dart';
 

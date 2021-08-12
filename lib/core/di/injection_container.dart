@@ -7,7 +7,7 @@ import 'package:base_proj/data/local/repository/locale_repository.dart';
 import 'package:base_proj/data/local/repository/notification_local_repository.dart';
 import 'package:base_proj/data/local/repository/sample_quotable_local_repository.dart';
 import 'package:base_proj/data/remote/api/rest_api_client.dart';
-import 'package:base_proj/data/remote/repository/sample_repository.dart';
+import 'package:base_proj/data/remote/repository/sample_quotable_repository_impl.dart';
 import 'package:base_proj/res/strings/app_strings/app_strings.dart';
 import 'package:get_it/get_it.dart';
 

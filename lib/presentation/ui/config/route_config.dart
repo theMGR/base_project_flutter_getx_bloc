@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:project/presentation/ui/pages/0_bloc_example/bloc_example_page.dart';
+import 'package:project/presentation/ui/pages/0_clean_architecture_example/clean_architecture_example_binding.dart';
+import 'package:project/presentation/ui/pages/0_clean_architecture_example/clean_architecture_example_view.dart';
 import 'package:project/presentation/ui/pages/0_example_page/example_page.dart';
 import 'package:project/presentation/ui/pages/0_getx_example/get_xample/get_xample_binding.dart';
 import 'package:project/presentation/ui/pages/0_getx_example/get_xample/get_xample_view.dart';
@@ -33,6 +35,7 @@ class RouteConfig {
     GetPage(name: ExamplePage.route, page: () => ExamplePage()),
     GetPage(name: GetXamplePage.route, page: () => GetXamplePage(), binding: GetXampleBinding()),
     GetPage(name: BlocExamplePage.route, page: () => BlocExamplePage()),
+    GetPage(name: CleanArchitectureExamplePage.route, page: () => CleanArchitectureExamplePage(), binding: CleanArchitectureExampleBinding()),
 
     GetPage(name: main, page: () => AppMainPage(), binding: AppMainBinding()),
     GetPage(name: splash, page: () => SplashPage(), binding: SplashBinding()),

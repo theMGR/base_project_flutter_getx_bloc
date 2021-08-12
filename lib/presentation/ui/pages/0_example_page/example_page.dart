@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project/presentation/ui/pages/0_bloc_example/bloc_example_page.dart';
+import 'package:project/presentation/ui/pages/0_clean_architecture_example/clean_architecture_example_view.dart';
 import 'package:project/presentation/ui/pages/0_getx_example/get_xample/get_xample_view.dart';
 
 class ExamplePage extends StatelessWidget {
@@ -27,6 +28,12 @@ class ExamplePage extends StatelessWidget {
                   Get.toNamed(BlocExamplePage.route);
                 },
                 child: Text("Flutter Bloc Example", style: TextStyle(fontSize: 20))),
+            SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: () {
+                  Get.toNamed(CleanArchitectureExamplePage.route);
+                },
+                child: Text("Clean Architecture Example", style: TextStyle(fontSize: 20))),
           ]),
         ),
       ),
